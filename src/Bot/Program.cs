@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
-var builder = Host
+var host = await Host
     .CreateDefaultBuilder()
     .ConfigureServices((hostContext, services) =>
     {
@@ -15,9 +15,8 @@ var builder = Host
         services.TryAddScoped<LoggingService>();
         services.TryAddScoped<SlashCommandBuilderService>();
         services.TryAddScoped<SlashCommandHandler>();
-    });
-
-var host = await builder.StartAsync();
+    })
+    .StartAsync();
 
 var client = host.Services.GetRequiredService<DiscordSocketClient>();
 var command = host.Services.GetRequiredService<CommandService>();
@@ -35,4 +34,4 @@ client.SlashCommandExecuted += slashHandler.HandleAsync;
 
 command.Log += logger.LogAsync;
 
-await Task.Delay(-1);
+await Task.Delay(Timeout.Infinite);
