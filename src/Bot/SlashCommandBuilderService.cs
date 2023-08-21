@@ -1,8 +1,10 @@
 using System.Net.Mail;
+using System.Reflection;
 using System.Text.Json;
 using Discord;
 using Discord.Net;
 using Discord.WebSocket;
+using Dohyo.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace Dohyo;
@@ -11,49 +13,27 @@ public class SlashCommandBuilderService
 {
     private readonly DiscordSocketClient _client;
     private readonly ILogger<SlashCommandBuilderService> _logger;
+    private readonly IEnumerable<ICommand> _commands;
 
-    public SlashCommandBuilderService(DiscordSocketClient client, ILogger<SlashCommandBuilderService> logger)
+    public SlashCommandBuilderService(DiscordSocketClient client, ILogger<SlashCommandBuilderService> logger, IEnumerable<ICommand> commands)
     {
         _client = client;
         _logger = logger;
+        _commands = commands;
     }
 
     public async Task OnReadyAsync()
     {
-        var guild = _client.GetGuild(492262151084572682);
-
-        // Create any commands that may be missing
-        var command = new SlashCommandBuilder()
-            .WithName("bet")
-            .WithDescription("Place your bets!")
-            .AddOptions(new[]
-            {
-                new SlashCommandOptionBuilder()
-                    .WithName("side")
-                    .WithDescription("Which side are you going to bet on?")
-                    .WithRequired(true)
-                    .AddChoice("Left", "left")
-                    .AddChoice("Right", "right")
-                    .WithType(ApplicationCommandOptionType.String),
-                new SlashCommandOptionBuilder()
-                    .WithName("amount")
-                    .WithDescription("How much are you going to bet?")
-                    .WithRequired(true)
-                    .WithType(ApplicationCommandOptionType.Integer)
-            })
-            .Build();
-        
-        var fightCommand = new SlashCommandBuilder()
-            .WithName("fight")
-            .WithDescription("Start the game!")
-            .WithDefaultMemberPermissions(GuildPermission.Administrator)
-            .Build();
-
         try
         {
+            // Get this from a config file?
+            var guild = _client.GetGuild(492262151084572682);
+
             _logger.LogInformation("Creating slash command");
-            await guild.CreateApplicationCommandAsync(command);
-            await guild.CreateApplicationCommandAsync(fightCommand);
+            foreach (var command in _commands)
+            {
+                await guild.CreateApplicationCommandAsync(command.BuildCommand());
+            }
         }
         catch (HttpException ex)
         {
