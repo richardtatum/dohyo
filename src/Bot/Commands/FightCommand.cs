@@ -3,17 +3,17 @@ using Discord.WebSocket;
 
 namespace Dohyo.Commands;
 
-public class FightCommand : ICommand
+public class FightCommand : SlashCommand
 {
-    public string Name => "fight";
+    public override string Name => "fight";
 
-    public SlashCommandProperties BuildCommand() => new SlashCommandBuilder()
+    public override SlashCommandProperties BuildCommand() => new SlashCommandBuilder()
         .WithName("fight")
         .WithDescription("Start the game!")
         .WithDefaultMemberPermissions(GuildPermission.Administrator)
         .Build();
 
-    public Embed BuildResponse(SocketSlashCommand command) => new EmbedBuilder()
+    protected override Embed BuildResponse(SocketSlashCommand command) => new EmbedBuilder()
         .WithAuthor(command.User)
         .WithTitle("Game Started")
         .WithDescription("The game has started! Ready your bets!")
@@ -21,10 +21,4 @@ public class FightCommand : ICommand
         .WithColor(Color.Gold)
         .WithCurrentTimestamp()
         .Build();
-
-    public Task RespondAsync(SocketSlashCommand command)
-    {
-        var response = BuildResponse(command);
-        return command.RespondAsync(embed: response);
-    }
 }

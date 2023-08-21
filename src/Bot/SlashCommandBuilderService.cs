@@ -1,7 +1,4 @@
-using System.Net.Mail;
-using System.Reflection;
 using System.Text.Json;
-using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using Dohyo.Commands;
@@ -13,9 +10,9 @@ public class SlashCommandBuilderService
 {
     private readonly DiscordSocketClient _client;
     private readonly ILogger<SlashCommandBuilderService> _logger;
-    private readonly IEnumerable<ICommand> _commands;
+    private readonly IEnumerable<SlashCommand> _commands;
 
-    public SlashCommandBuilderService(DiscordSocketClient client, ILogger<SlashCommandBuilderService> logger, IEnumerable<ICommand> commands)
+    public SlashCommandBuilderService(DiscordSocketClient client, ILogger<SlashCommandBuilderService> logger, IEnumerable<SlashCommand> commands)
     {
         _client = client;
         _logger = logger;

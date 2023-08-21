@@ -3,11 +3,11 @@ using Discord.WebSocket;
 
 namespace Dohyo.Commands;
 
-public class BetCommand : ICommand
+public class BetCommand : SlashCommand
 {
-    public string Name => "bet";
+    public override string Name => "bet";
 
-    public SlashCommandProperties BuildCommand() => new SlashCommandBuilder()
+    public override SlashCommandProperties BuildCommand() => new SlashCommandBuilder()
         .WithName("bet")
         .WithDescription("Place your bets!")
         .AddOptions(new[]
@@ -27,7 +27,7 @@ public class BetCommand : ICommand
         })
         .Build();
 
-    public Embed BuildResponse(SocketSlashCommand command)
+    protected override Embed BuildResponse(SocketSlashCommand command)
     {
         var side = command.Data.Options.First(x => x.Name == "side").Value;
         var amount = command.Data.Options.First(x => x.Name == "amount").Value;
@@ -40,11 +40,5 @@ public class BetCommand : ICommand
             .WithColor(Color.Green)
             .WithCurrentTimestamp()
             .Build();
-    }
-
-    public Task RespondAsync(SocketSlashCommand command)
-    {
-        var response = BuildResponse(command);
-        return command.RespondAsync(embed: response);
     }
 }

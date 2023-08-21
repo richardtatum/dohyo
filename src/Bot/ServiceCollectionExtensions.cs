@@ -11,11 +11,11 @@ public static class ServiceCollectionExtensions
         var commands = Assembly
             .GetExecutingAssembly()
             .GetTypes()
-            .Where(x => !x.IsAbstract && x.IsClass && x.IsAssignableTo(typeof(ICommand)));
+            .Where(x => !x.IsAbstract && x.IsClass && x.IsAssignableTo(typeof(SlashCommand)));
 
         foreach (var command in commands)
         {
-            services.Add(new ServiceDescriptor(typeof(ICommand), command, ServiceLifetime.Scoped));
+            services.Add(new ServiceDescriptor(typeof(SlashCommand), command, ServiceLifetime.Scoped));
         }
     }
 }

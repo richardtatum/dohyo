@@ -8,9 +8,9 @@ namespace Dohyo;
 public class SlashCommandHandler
 {
     private readonly ILogger<SlashCommandHandler> _logger;
-    private readonly IEnumerable<ICommand> _commands;
+    private readonly IEnumerable<SlashCommand> _commands;
 
-    public SlashCommandHandler(ILogger<SlashCommandHandler> logger, IEnumerable<ICommand> commands)
+    public SlashCommandHandler(ILogger<SlashCommandHandler> logger, IEnumerable<SlashCommand> commands)
     {
         _logger = logger;
         _commands = commands;
