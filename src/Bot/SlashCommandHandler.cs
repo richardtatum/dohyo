@@ -18,6 +18,10 @@ public class SlashCommandHandler
 
     public Task HandleAsync(SocketSlashCommand command) => _commands
         .Where(x => x.Name == command.Data.Name)
-        .Select(x => x.RespondAsync(command))
+        .Select(x =>
+        {
+            _logger.LogInformation("Handling command {Command} for user {User}", command.Data.Name, command.User.Username);
+            return x.RespondAsync(command);
+        })
         .FirstOrDefault() ?? Task.CompletedTask;
 }
