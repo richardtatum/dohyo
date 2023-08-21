@@ -13,17 +13,17 @@ var builder = Host
         services.TryAddScoped<DiscordSocketClient>();
         services.TryAddScoped<CommandService>();
         services.TryAddScoped<LoggingService>();
-        services.TryAddScoped<SlashCommandService>();
+        services.TryAddScoped<SlashCommandBuilderService>();
         services.TryAddScoped<SlashCommandHandler>();
     });
 
-var x = await builder.StartAsync();
+var host = await builder.StartAsync();
 
-var client = x.Services.GetRequiredService<DiscordSocketClient>();
-var command = x.Services.GetRequiredService<CommandService>();
-var slashCommand = x.Services.GetRequiredService<SlashCommandService>();
-var slashHandler = x.Services.GetRequiredService<SlashCommandHandler>();
-var logger = x.Services.GetRequiredService<LoggingService>();
+var client = host.Services.GetRequiredService<DiscordSocketClient>();
+var command = host.Services.GetRequiredService<CommandService>();
+var slashCommand = host.Services.GetRequiredService<SlashCommandBuilderService>();
+var slashHandler = host.Services.GetRequiredService<SlashCommandHandler>();
+var logger = host.Services.GetRequiredService<LoggingService>();
 
 var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
 await client.LoginAsync(TokenType.Bot, token);

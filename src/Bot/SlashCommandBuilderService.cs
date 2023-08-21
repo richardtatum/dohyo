@@ -1,3 +1,4 @@
+using System.Net.Mail;
 using System.Text.Json;
 using Discord;
 using Discord.Net;
@@ -6,12 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Dohyo;
 
-public class SlashCommandService
+public class SlashCommandBuilderService
 {
     private readonly DiscordSocketClient _client;
-    private readonly ILogger<SlashCommandService> _logger;
+    private readonly ILogger<SlashCommandBuilderService> _logger;
 
-    public SlashCommandService(DiscordSocketClient client, ILogger<SlashCommandService> logger)
+    public SlashCommandBuilderService(DiscordSocketClient client, ILogger<SlashCommandBuilderService> logger)
     {
         _client = client;
         _logger = logger;
@@ -21,6 +22,7 @@ public class SlashCommandService
     {
         var guild = _client.GetGuild(492262151084572682);
 
+        // Create any commands that may be missing
         var command = new SlashCommandBuilder()
             .WithName("bet")
             .WithDescription("Place your bets!")
@@ -40,11 +42,18 @@ public class SlashCommandService
                     .WithType(ApplicationCommandOptionType.Integer)
             })
             .Build();
+        
+        var fightCommand = new SlashCommandBuilder()
+            .WithName("fight")
+            .WithDescription("Start the game!")
+            .WithDefaultMemberPermissions(GuildPermission.Administrator)
+            .Build();
 
         try
         {
             _logger.LogInformation("Creating slash command");
             await guild.CreateApplicationCommandAsync(command);
+            await guild.CreateApplicationCommandAsync(fightCommand);
         }
         catch (HttpException ex)
         {
