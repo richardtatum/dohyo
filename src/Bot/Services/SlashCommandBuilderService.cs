@@ -4,7 +4,7 @@ using Discord.WebSocket;
 using Dohyo.Commands;
 using Microsoft.Extensions.Logging;
 
-namespace Dohyo;
+namespace Dohyo.Services;
 
 public class SlashCommandBuilderService
 {

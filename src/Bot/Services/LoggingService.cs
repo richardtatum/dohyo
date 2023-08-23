@@ -2,7 +2,7 @@ using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Logging;
 
-namespace Dohyo;
+namespace Dohyo.Services;
 
 public class LoggingService
 {

@@ -1,9 +1,8 @@
-using Discord;
 using Discord.WebSocket;
 using Dohyo.Commands;
 using Microsoft.Extensions.Logging;
 
-namespace Dohyo;
+namespace Dohyo.Handlers;
 
 public class SlashCommandHandler
 {
