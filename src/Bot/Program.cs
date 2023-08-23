@@ -2,6 +2,10 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Dohyo;
+using Dohyo.Data;
+using Dohyo.Handlers;
+using Dohyo.Repositories;
+using Dohyo.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +19,8 @@ var host = await Host
         services.TryAddScoped<LoggingService>();
         services.TryAddScoped<SlashCommandBuilderService>();
         services.TryAddScoped<SlashCommandHandler>();
+        services.TryAddScoped<QueryRepository>();
+        services.TryAddScoped<CommandRepository>();
         services.AddSlashCommands();
     })
     .StartAsync();
