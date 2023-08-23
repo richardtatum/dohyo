@@ -43,9 +43,17 @@ public class BetCommand : SlashCommand
             })
             .Build());
 
+    // TODO: Move this to a service
     protected override async Task<Embed> BuildResponseAsync(SocketSlashCommand command)
     {
         _logger.LogInformation("BET :: User {Username} placed a bet. Getting fight id...", command.User.Username);
+
+        var userExists = await _queryRepository.UserExistsAsync(command.User.Id);
+        if (!userExists)
+        {
+            _logger.LogInformation("User {Username} does not exist. Creating user...", command.User.Username);
+            await _commandRepository.AddUserAsync(command.User.Id, command.User.Username);
+        }
         
         var fightId = await _queryRepository.GetOpenFightIdAsync();
         if (fightId is null)
