@@ -15,7 +15,7 @@ public class QueryRepository
         return x;
     }
 
-    public async Task<int> GetBalanceAsync(long userId)
+    public async Task<int> GetBalanceAsync(ulong userId)
     {
         using var connection = Database.GetConnection();
         

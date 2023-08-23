@@ -6,7 +6,7 @@ namespace Dohyo.Repositories;
 
 public class CommandRepository
 {
-    public async Task AddUserAsync(long userId, string username)
+    public async Task AddUserAsync(ulong userId, string username)
     {
         using var connection = Database.GetConnection();
         
