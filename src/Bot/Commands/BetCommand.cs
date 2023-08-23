@@ -58,7 +58,7 @@ public class BetCommand : SlashCommand
         var fightId = await _queryRepository.GetOpenFightIdAsync();
         if (fightId is null)
         {
-            _logger.LogWarning("BET :: User {Username} failed to place a bet. No fight is currently open.", command.User.Username);
+            _logger.LogError("BET :: User {Username} failed to place a bet. No fight is currently open.", command.User.Username);
             return new EmbedBuilder()
                 .WithAuthor(command.User)
                 .WithTitle("Bet Failed")
@@ -72,7 +72,7 @@ public class BetCommand : SlashCommand
         var hasBet = await _queryRepository.HasBetAsync(fightId.Value, command.User.Id);
         if (hasBet)
         {
-            _logger.LogWarning("BET :: User {Username} failed to place a bet. User has already placed a bet for this fight.", command.User.Username);
+            _logger.LogError("BET :: User {Username} failed to place a bet. User has already placed a bet for this fight.", command.User.Username);
             return new EmbedBuilder()
                 .WithAuthor(command.User)
                 .WithTitle("Bet Failed")
@@ -86,6 +86,7 @@ public class BetCommand : SlashCommand
         var side = command.Data.Options.GetSide();
         if (side is null)
         {
+            _logger.LogError("BET :: User {Username} failed to place a bet. User picked an invalid side.", command.User.Username);
             return new EmbedBuilder()
                 .WithAuthor(command.User)
                 .WithTitle("Bet Failed")
@@ -99,6 +100,7 @@ public class BetCommand : SlashCommand
         var amount = command.Data.Options.GetAmount();
         if (amount is null || amount <= 0)
         {
+            _logger.LogError("BET :: User {Username} failed to place a bet. User passed an invalid amount. Amount: {Amount}.", command.User.Username, amount);
             return new EmbedBuilder()
                 .WithAuthor(command.User)
                 .WithTitle("Bet Failed")
