@@ -6,11 +6,11 @@ namespace Dohyo.Commands;
 public abstract class SlashCommand
 {
     public abstract string Name { get; }
-    public abstract SlashCommandProperties BuildCommand();
-    protected abstract Embed BuildResponse(SocketSlashCommand command);
-    public virtual Task RespondAsync(SocketSlashCommand command)
+    public abstract Task<SlashCommandProperties> BuildCommandAsync();
+    protected abstract Task<Embed> BuildResponseAsync(SocketSlashCommand command);
+    public virtual async Task RespondAsync(SocketSlashCommand command)
     {
-        var response = BuildResponse(command);
-        return command.RespondAsync(embed: response);
+        var response = await BuildResponseAsync(command);
+        await command.RespondAsync(embed: response);
     }
 }

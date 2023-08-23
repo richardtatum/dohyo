@@ -29,7 +29,8 @@ public class SlashCommandBuilderService
             _logger.LogInformation("Creating slash command");
             foreach (var command in _commands)
             {
-                await guild.CreateApplicationCommandAsync(command.BuildCommand());
+                var commandProperties= await command.BuildCommandAsync();
+                await guild.CreateApplicationCommandAsync(commandProperties);
             }
         }
         catch (HttpException ex)
