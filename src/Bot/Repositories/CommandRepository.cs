@@ -6,13 +6,6 @@ namespace Dohyo.Repositories;
 
 public class CommandRepository
 {
-    private readonly QueryRepository _queryRepository;
-
-    public CommandRepository(QueryRepository queryRepository)
-    {
-        _queryRepository = queryRepository;
-    }
-
     public async Task AddUserAsync(long userId, string username)
     {
         using var connection = Database.GetConnection();
@@ -32,11 +25,9 @@ public class CommandRepository
         await connection.ExecuteAsync("insert into fight (start_date) values (datetime('now'));");
     }
 
-    public async Task EndFightAsync(Side winningSide)
+    public async Task EndFightAsync(long fightId, Side winningSide)
     {
         using var connection = Database.GetConnection();
-
-        var fightId = await _queryRepository.GetOpenFightIdAsync();
         
         // Mark the fight as ended and set the winning side
         await connection.ExecuteAsync(
@@ -57,12 +48,20 @@ public class CommandRepository
             });
     }
 
-    public async Task AddBetAsync(long userId, Side side, int amount)
+    public async Task AddBetAsync(long fightId, ulong userId, Side side, int amount)
     {
         using var connection = Database.GetConnection();
         
-        var fightId = await _queryRepository.GetOpenFightIdAsync();
-
+        // Remove the amount from the user's balance
+        await connection.ExecuteAsync(
+            "update user set balance = balance - @amount where id = @userId;",
+            new
+            {
+                userId,
+                amount
+            });
+        
+        // Add the bet to the database
         await connection.ExecuteAsync(
             "insert into bet (fight_id, user_id, side, amount) values (@fightId, @userId, @side, @amount);", 
             new

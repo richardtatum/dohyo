@@ -27,11 +27,24 @@ public class QueryRepository
             });
     }
     
-    public async Task<long> GetOpenFightIdAsync()
+    public async Task<long?> GetOpenFightIdAsync()
     {
         using var connection = Database.GetConnection();
         
-        return await connection.QueryFirstOrDefaultAsync<long>(
+        return await connection.QueryFirstOrDefaultAsync<long?>(
             "select id from fight where end_date is null;");
+    }
+    
+    public async Task<bool> HasBetAsync(long fightId, ulong userId)
+    {
+        using var connection = Database.GetConnection();
+        
+        return await connection.QueryFirstOrDefaultAsync<bool>(
+            "select count(*) from bet where fight_id = @fightId and user_id = @userId;",
+            new
+            {
+                fightId,
+                userId
+            });
     }
 }
