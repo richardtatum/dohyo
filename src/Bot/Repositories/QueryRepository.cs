@@ -47,4 +47,16 @@ public class QueryRepository
                 userId
             });
     }
+
+    public async Task<bool> UserExistsAsync(ulong userId)
+    {
+        using var connection = Database.GetConnection();
+        
+        return await connection.QueryFirstOrDefaultAsync<bool>(
+            "select count(*) from user where id = @userId;",
+            new
+            {
+                userId
+            });
+    }
 }
