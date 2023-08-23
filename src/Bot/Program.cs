@@ -35,4 +35,6 @@ client.SlashCommandExecuted += commandHandler.HandleAsync;
 
 command.Log += logger.LogAsync;
 
+await Database.EnsureCreatedAsync();
+
 await Task.Delay(Timeout.Infinite);
