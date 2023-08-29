@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Dohyo.Extensions;
 using Dohyo.Models;
 using Dohyo.Repositories;
+using Dohyo.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Dohyo.Commands;
@@ -12,12 +13,14 @@ public class FightEndCommand : SlashCommand
     private readonly ILogger<FightEndCommand> _logger;
     private readonly CommandRepository _commandRepository;
     private readonly QueryRepository _queryRepository;
+    private readonly BetService _betService; // TODO: Move other queries to this service
 
-    public FightEndCommand(ILogger<FightEndCommand> logger, CommandRepository commandRepository, QueryRepository queryRepository)
+    public FightEndCommand(ILogger<FightEndCommand> logger, CommandRepository commandRepository, QueryRepository queryRepository, BetService betService)
     {
         _logger = logger;
         _commandRepository = commandRepository;
         _queryRepository = queryRepository;
+        _betService = betService;
     }
 
     public override string Name => "end";
@@ -38,6 +41,10 @@ public class FightEndCommand : SlashCommand
             .WithDefaultMemberPermissions(GuildPermission.Administrator)
             .Build());
 
+    // Winners always get their bet back
+    // Losers lose their bet
+    // Winners get a share of an arbitrary pot
+    // How to set pot size?
     protected override async Task<Embed> BuildResponseAsync(SocketSlashCommand command)
     {
         _logger.LogInformation("FIGHT :: User {Username} ended a fight. Getting fight id...", command.User.Username);
@@ -72,6 +79,9 @@ public class FightEndCommand : SlashCommand
         
         _logger.LogInformation("FIGHT :: Ending fight. Id: {Id}. Winner: {Winner}", fightId, winningSide.Value.ToString());
         await _commandRepository.EndFightAsync(fightId.Value, winningSide.Value);
+        
+        _logger.LogInformation("FIGHT :: Distributing winnings for fight {Id}", fightId);
+        await _betService.DistributeWinningsAsync(fightId.Value, winningSide.Value);
         
         return new EmbedBuilder()
             .WithAuthor(command.User)

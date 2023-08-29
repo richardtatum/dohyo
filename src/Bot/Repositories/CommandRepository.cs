@@ -72,4 +72,17 @@ public class CommandRepository
                 amount
             });
     }
+    
+    public async Task AddBalanceAsync(ulong userId, int amount)
+    {
+        using var connection = Database.GetConnection();
+        
+        await connection.ExecuteAsync(
+            "update user set balance = balance + @amount where id = @userId;",
+            new
+            {
+                userId,
+                amount
+            });
+    }
 }

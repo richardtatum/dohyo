@@ -16,6 +16,7 @@ var host = await Host
     {
         services.TryAddScoped<DiscordSocketClient>();
         services.TryAddScoped<CommandService>();
+        services.TryAddScoped<BetService>();
         services.TryAddScoped<LoggingService>();
         services.TryAddScoped<SlashCommandBuilderService>();
         services.TryAddScoped<SlashCommandHandler>();

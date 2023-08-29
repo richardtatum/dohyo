@@ -6,15 +6,6 @@ namespace Dohyo.Repositories;
 
 public class QueryRepository
 {
-    public async Task<User[]> GetUsersAsync()
-    {
-        using var connection = Database.GetConnection();
-        var result = await connection.QueryAsync<User>("select * from user;");
-
-        var x = result.ToArray();
-        return x;
-    }
-
     public async Task<int> GetBalanceAsync(ulong userId)
     {
         using var connection = Database.GetConnection();
@@ -58,5 +49,19 @@ public class QueryRepository
             {
                 userId
             });
+    }
+
+    public async Task<Bet[]> GetAllBetsAsync(long fightId)
+    {
+        using var connection = Database.GetConnection();
+        
+        var result = await connection.QueryAsync<Bet>(
+            "select user_id as userid, amount, side from bet where fight_id = @fightId;",
+            new
+            {
+                fightId
+            });
+        
+        return result.ToArray();
     }
 }
