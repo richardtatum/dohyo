@@ -111,7 +111,7 @@ public class BetCommand : SlashCommand
                 .Build();
         }
 
-        _logger.LogInformation("BET :: User {Username} placed a bet. FightId: {Id}. Side: {Side} Amount: {Amount}.", fightId, command.User.Username, side, amount);
+        _logger.LogInformation("BET :: User {Username} placed a bet. FightId: {Id}. Side: {Side} Amount: {Amount}.", command.User.Username, fightId, side, amount);
         await _commandRepository.AddBetAsync(fightId.Value, command.User.Id, side.Value, amount.Value);
 
         return new EmbedBuilder()
