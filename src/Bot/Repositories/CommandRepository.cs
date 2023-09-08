@@ -85,4 +85,27 @@ public class CommandRepository
                 amount
             });
     }
+
+    public async Task TipWizardAsync(ulong userId, int amount)
+    {
+        using var connection = Database.GetConnection();
+        
+        // Remove the amount from the user's balance
+        await connection.ExecuteAsync(
+            "update user set balance = balance - @amount where id = @userId;",
+            new
+            {
+                userId,
+                amount
+            });
+        
+        // Add it to the wizard
+        await connection.ExecuteAsync(
+            "update user set balance = balance + @amount where id = @wizardId;",
+            new
+            {
+                amount,
+                wizardId = 1
+            });
+    }
 }
