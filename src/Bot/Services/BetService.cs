@@ -30,22 +30,26 @@ public class BetService
             .Where(x => x.Side == winningSide)
             .ToArray();
         _logger.LogInformation("BET :: Found {WinningBetCount} winning bets for fight {FightId}.", winningBets.Length, fightId);
+
+        var winningPot = bets.Where(x => x.Side == winningSide).Sum(x => x.Amount);
+        var losingPot = bets.Where(x => x.Side != winningSide).Sum(x => x.Amount);
         
-        return CalculateWinnings(winningBets, total);
+        return CalculateWinnings(winningBets, losingPot, winningPot);
     }
 
-    public Dictionary<ulong, int> CalculateWinnings(IEnumerable<Bet> bets, int totalWinnings)
+    public Dictionary<ulong, int> CalculateWinnings(IEnumerable<Bet> bets, int losingPot, int winningPot)
     {
-        _logger.LogInformation("BET :: Calculating winnings distribution for {BetCount} bets and {Winnings} total.", bets.Count(), totalWinnings);
+        _logger.LogInformation("BET :: Calculating winnings distribution for {BetCount} bets and {Winnings} total.", bets.Count(), losingPot + winningPot);
         
         var winnings = new Dictionary<ulong, int>();
         foreach (var bet in bets)
         {
-            var betPercentage = (double)bet.Amount / totalWinnings;
-            _logger.LogInformation("BET :: Calculating winnings for user {UserId} with bet amount {BetAmount} and percentage {BetPercentage}.", bet.UserId, bet.Amount, betPercentage);
+            // Get the total percentage of the bet amount from the winning pool, thats the percentage of the loosing pool you get
+            var betPercentage = (double)bet.Amount / winningPot;
+            _logger.LogInformation("BET :: Calculating winnings for user {Username} with bet amount {BetAmount} and percentage {BetPercentage}.", bet.Username, bet.Amount, betPercentage);
             
-            var individualWinnings = (int)Math.Round(betPercentage * totalWinnings);
-            _logger.LogInformation("BET :: Calculated winnings for user {UserId} with bet amount {BetAmount} and percentage {BetPercentage} as {IndividualWinnings}.", bet.UserId, bet.Amount, betPercentage, individualWinnings);
+            var individualWinnings = bet.Amount + (int)Math.Round(betPercentage * losingPot);
+            _logger.LogInformation("BET :: Calculated winnings for user {Username} with bet amount {BetAmount} and percentage {BetPercentage} as {IndividualWinnings}.", bet.Username, bet.Amount, betPercentage, individualWinnings);
             winnings.Add(bet.UserId, individualWinnings);
         }
 

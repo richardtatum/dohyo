@@ -56,7 +56,15 @@ public class QueryRepository
         using var connection = Database.GetConnection();
         
         var result = await connection.QueryAsync<Bet>(
-            "select user_id as userid, amount, side from bet where fight_id = @fightId;",
+            @"
+                select 
+                    b.user_id as userid, 
+                    u.username,
+                    b.amount, 
+                    b.side 
+                from bet b 
+                inner join user u on u.id = b.user_id
+                where fight_id = @fightId;",
             new
             {
                 fightId
