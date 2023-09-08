@@ -117,7 +117,7 @@ public class BetCommand : SlashCommand
         return new EmbedBuilder()
             .WithAuthor(command.User)
             .WithTitle("Bet Placed")
-            .WithDescription($"Your bet has been placed! You chose {side} and bet {amount}!")
+            .WithDescription($"Your bet has been placed! You chose {side} and bet \u20ab{amount:n0}!")
             .WithFooter("Good luck!")
             .WithColor(Color.Green)
             .WithCurrentTimestamp()

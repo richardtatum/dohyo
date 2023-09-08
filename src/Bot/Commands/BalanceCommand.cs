@@ -44,7 +44,7 @@ public class BalanceCommand : SlashCommand
     private Embed GetBalanceEmbed(SocketUser user, int balance) => new EmbedBuilder()
         .WithAuthor(user)
         .WithTitle("Balance")
-        .WithDescription($"Your balance is {balance}.")
+        .WithDescription($"Your balance is \u20ab{balance:n0}.")
         .WithFooter("But is it enough?")
         .WithColor(balance > 0 ? Color.Green : Color.Red)
         .WithCurrentTimestamp()
