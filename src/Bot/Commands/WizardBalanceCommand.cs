@@ -35,7 +35,7 @@ public class WizardBalanceCommand : SlashCommand
             _logger.LogError("WIZARD :: Cannot find The Wizard, all is lost");
             return new EmbedBuilder()
                 .WithAuthor(command.User)
-                .WithTitle("Wizard Balance Failed")
+                .WithTitle("Where Wizard Wallet?")
                 .WithDescription($"The Wizard has left the building, all is lost.")
                 .WithFooter("What have you done!?")
                 .WithColor(Color.Red)
