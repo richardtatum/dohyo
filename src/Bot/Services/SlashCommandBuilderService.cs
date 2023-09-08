@@ -24,7 +24,12 @@ public class SlashCommandBuilderService
         try
         {
             // Get this from a config file?
-            var guild = _client.GetGuild(492262151084572682);
+            if (!ulong.TryParse(Environment.GetEnvironmentVariable("GUILD_ID"), out var guildId))
+            {
+                throw new ArgumentNullException("GUILD_ID is not set");
+            }
+            
+            var guild = _client.GetGuild(guildId);
 
             _logger.LogInformation("Creating slash command");
             foreach (var command in _commands)
