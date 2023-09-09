@@ -21,3 +21,6 @@ CREATE TABLE IF NOT EXISTS bet (
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+INSERT INTO user 
+(id, balance, username) 
+VALUES (1, 0, 'Wizard');
