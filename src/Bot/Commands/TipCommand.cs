@@ -1,6 +1,7 @@
 using Discord;
 using Discord.WebSocket;
 using Dohyo.Extensions;
+using Dohyo.Models;
 using Dohyo.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -55,7 +56,7 @@ public class TipCommand : SlashCommand
         return new EmbedBuilder()
             .WithAuthor(command.User)
             .WithTitle("Tip the Wizard")
-            .WithDescription($"You tipped the Wizard \u20ab{amount:n0}! You legend.")
+            .WithDescription($"You tipped the Wizard {DohyoConstants.CurrencySymbol}{amount:n0}! You legend.")
             .WithFooter("The Wizard tips his hat in thanks, what a class act.")
             .WithColor(Color.Gold)
             .WithCurrentTimestamp()

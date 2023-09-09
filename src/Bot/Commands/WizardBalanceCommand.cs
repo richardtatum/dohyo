@@ -1,5 +1,6 @@
 using Discord;
 using Discord.WebSocket;
+using Dohyo.Models;
 using Dohyo.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -46,7 +47,7 @@ public class WizardBalanceCommand : SlashCommand
         var balance = await _queryRepository.GetBalanceAsync(_wizardId);
         return  new EmbedBuilder()
             .WithTitle("Wizard Wallet")
-            .WithDescription($"The Wizards balance is \u20ab{balance:n0}.")
+            .WithDescription($"The Wizards balance is {DohyoConstants.CurrencySymbol}{balance:n0}.")
             .WithFooter("But he isn't materialistic, he just wants to see a good fight.")
             .WithColor(balance > 0 ? Color.Green : Color.Red)
             .WithCurrentTimestamp()

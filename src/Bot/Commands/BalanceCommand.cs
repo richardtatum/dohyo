@@ -1,5 +1,6 @@
 using Discord;
 using Discord.WebSocket;
+using Dohyo.Models;
 using Dohyo.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -44,7 +45,7 @@ public class BalanceCommand : SlashCommand
     private Embed GetBalanceEmbed(SocketUser user, int balance) => new EmbedBuilder()
         .WithAuthor(user)
         .WithTitle("Balance")
-        .WithDescription($"Your balance is \u20ab{balance:n0}.")
+        .WithDescription($"Your balance is {DohyoConstants.CurrencySymbol}{balance:n0}.")
         .WithFooter("But is it enough?")
         .WithColor(balance > 0 ? Color.Green : Color.Red)
         .WithCurrentTimestamp()
