@@ -2,7 +2,7 @@ using System.Reflection;
 using Dohyo.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Dohyo;
+namespace Dohyo.Extensions;
 
 public static class ServiceCollectionExtensions
 {

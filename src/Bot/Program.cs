@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Dohyo;
 using Dohyo.Data;
+using Dohyo.Extensions;
 using Dohyo.Handlers;
 using Dohyo.Repositories;
 using Dohyo.Services;
