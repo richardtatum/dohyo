@@ -31,7 +31,7 @@ public class SlashCommandBuilderService
             
             var guild = _client.GetGuild(guildId);
 
-            _logger.LogInformation("Creating slash command");
+            _logger.LogInformation("STARTUP :: Creating slash commands...");
             foreach (var command in _commands)
             {
                 var commandProperties= await command.BuildCommandAsync();
@@ -40,7 +40,7 @@ public class SlashCommandBuilderService
         }
         catch (HttpException ex)
         {
-            _logger.LogWarning("Failed to create slash command");
+            _logger.LogWarning("STARTUP :: Failed to create slash command: {Message}", ex.Message);
             var json = JsonSerializer.Serialize(ex.Errors, new JsonSerializerOptions
             {
                 WriteIndented = true
