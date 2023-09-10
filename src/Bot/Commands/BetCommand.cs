@@ -111,6 +111,20 @@ public class BetCommand : SlashCommand
                 .Build();
         }
 
+        var currentBalance = await _queryRepository.GetBalanceAsync(command.User.Id);
+        if (amount > currentBalance)
+        {
+            _logger.LogError("BET :: User {Username} failed to place a bet. User does not have enough money. Amount: {Amount}. Balance: {Balance}.", command.User.Username, amount, currentBalance);
+            return new EmbedBuilder()
+                .WithAuthor(command.User)
+                .WithTitle("Bet Failed")
+                .WithDescription($"You do not have enough money to place this bet. You have {DohyoConstants.CurrencySymbol}{currentBalance:n0} but you tried to bet {DohyoConstants.CurrencySymbol}{amount:n0}.")
+                .WithFooter("Busted.")
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp()
+                .Build();
+        }
+        
         _logger.LogInformation("BET :: User {Username} placed a bet. FightId: {Id}. Side: {Side}. Amount: {Amount}.", command.User.Username, fightId, side, amount);
         await _commandRepository.AddBetAsync(fightId.Value, command.User.Id, side.Value, amount.Value);
 
