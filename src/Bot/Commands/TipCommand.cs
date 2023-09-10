@@ -39,7 +39,7 @@ public class TipCommand : SlashCommand
         var amount = command.Data.Options.GetAmount();
         if (amount is null || amount <= 0)
         {
-            _logger.LogError("BET :: User {Username} failed to tip the wizard. User passed an invalid amount. Amount: {Amount}.", command.User.Username, amount);
+            _logger.LogError("TIP :: User {Username} failed to tip the wizard. User passed an invalid amount. Amount: {Amount}.", command.User.Username, amount);
             return new EmbedBuilder()
                 .WithAuthor(command.User)
                 .WithTitle("Tip Failed")
